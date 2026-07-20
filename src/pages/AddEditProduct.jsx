@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { toast } from "react-toastify";
-const MAX_IMAGES = import.meta.env.VITE_MAX_IMAGES ; // Default to 5 if not set in .env
+const MAX_IMAGES = import.meta.env.VITE_MAX_IMAGES ; 
 
 const productSchema = z.object({
   name: z.string().trim().min(2, "Product name must be at least 2 characters"),
@@ -25,7 +25,6 @@ export default function AddEditProduct() {
   const { type, id } = useParams();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(Boolean(type === "edit" && id));
   const [imageUrlInput, setImageUrlInput] = useState("");
 
   const {
@@ -57,7 +56,6 @@ export default function AddEditProduct() {
 
     const fetchProduct = async () => {
       try {
-        setIsLoading(true);
         const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/${id}`);
         reset({
           name: response.data.name || "",
@@ -71,10 +69,7 @@ export default function AddEditProduct() {
       } catch (error) {
         console.error(error);
          toast.error("Failed to load product details. Please try again later.");
-        // setError("root", { type: "server", message: "Unable to load product details." });
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
 
     fetchProduct();
@@ -141,7 +136,6 @@ export default function AddEditProduct() {
     } catch (error) {
       console.error(error);
       toast.error("Failed to save the product. Please try again.");
-      // setError("root", { type: "server", message: "Unable to save the product. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -251,7 +245,7 @@ export default function AddEditProduct() {
                 )}
               </div>
               <div className="col-12 d-flex gap-2">
-                <button type="submit" className="btn btn-primary" disabled={isSubmitting || isLoading}>
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting }>
                   {isSubmitting ? "Saving..." : type === "edit" ? "Update Product" : "Save Product"}
                 </button>
                 <button type="button" className="btn btn-outline-secondary" onClick={() => navigate("/products")}>

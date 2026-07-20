@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import ProductCard from "../component/ProductCard";
 import { useEffect ,useState} from "react";
-import axios from "axios";import Swal from "sweetalert2";
+import axios from "axios";
+import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 export default function Products() {
     const [search, setSearch] = useState();
