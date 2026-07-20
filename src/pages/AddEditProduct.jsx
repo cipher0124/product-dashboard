@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
@@ -27,7 +27,6 @@ export default function AddEditProduct() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(Boolean(type === "edit" && id));
   const [imageUrlInput, setImageUrlInput] = useState("");
-  const objectUrlsRef = useRef([]);
 
   const {
     register,
@@ -52,12 +51,6 @@ export default function AddEditProduct() {
 
   const uploadedImages = watch("images") || [];
 
-  useEffect(() => {
-    return () => {
-      objectUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-      objectUrlsRef.current = [];
-    };
-  }, []);
 
   useEffect(() => {
     if (type !== "edit" || !id) return;
@@ -104,11 +97,7 @@ export default function AddEditProduct() {
   };
 
   const removeImage = (index) => {
-    const imageToRemove = uploadedImages[index];
-    if (imageToRemove?.startsWith("blob:")) {
-      URL.revokeObjectURL(imageToRemove);
-      objectUrlsRef.current = objectUrlsRef.current.filter((url) => url !== imageToRemove);
-    }
+ 
 
     const updatedImages = uploadedImages.filter((_, imageIndex) => imageIndex !== index);
     setValue("images", updatedImages, { shouldValidate: true });
